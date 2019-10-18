@@ -1,4 +1,4 @@
-import { equals, minLength, not, makeValidator, Validator } from '../src'
+import { equals, makeValidator, not, Validator } from '../src'
 
 test('works as expected', () => {
   const IS_FOO = Symbol()

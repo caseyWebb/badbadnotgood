@@ -109,7 +109,7 @@ function testSeriality(
 
     const spy = jest.fn()
     const first = makeValidator(
-      (v) =>
+      () =>
         new Promise<boolean>((resolve) =>
           setTimeout(() => {
             spy()
@@ -117,7 +117,7 @@ function testSeriality(
           }, 2000)
         )
     )
-    const second = makeValidator((v) => {
+    const second = makeValidator(() => {
       expect(spy).toBeCalled()
       return true
     })
@@ -142,7 +142,7 @@ function testConcurrency(
 
     const spy = jest.fn()
     const first = makeValidator(
-      (v) =>
+      () =>
         new Promise<boolean>((resolve) =>
           setTimeout(() => {
             spy()
@@ -150,7 +150,7 @@ function testConcurrency(
           }, 2000)
         )
     )
-    const second = makeValidator((v) => {
+    const second = makeValidator(() => {
       expect(spy).not.toBeCalled()
       return true
     })

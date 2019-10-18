@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { all, any } from './composers'
 import { not, makeValidator } from './utils'
 
@@ -30,6 +32,17 @@ export const isLength = (
   message?: ValidatorMessage
 ): SyncValidator<ArrayLike> => makeValidator((v) => v.length === l, message)
 
+export const isType = (
+  t: string,
+  message?: ValidatorMessage
+): SyncValidator<any> => makeValidator((v: any) => typeof v === t, message)
+
+export const isNull = (message?: ValidatorMessage): SyncValidator<any> =>
+  equals(null, message)
+
+export const isUndefined = (message?: ValidatorMessage): SyncValidator<any> =>
+  isType('undefined', message)
+
 export const isEmpty = (
   message?: ValidatorMessage
 ): SyncValidator<ArrayLike | void | null> =>
@@ -46,30 +59,19 @@ export const isArray = (message?: ValidatorMessage): SyncValidator<any> =>
 export const isArrayLike = (message?: ValidatorMessage): SyncValidator<any> =>
   any([isType('string'), isArray()], message)
 
-export const isType = (
-  t: string,
-  message?: ValidatorMessage
-): SyncValidator<any> => makeValidator((v: any) => typeof v === t, message)
-
-export const isDate = (message?: ValidatorMessage): SyncValidator<any> =>
-  all<Date>([instanceOf(Date), (v) => isNumber()(v.getTime())], message)
-
-export const isNull = (message?: ValidatorMessage): SyncValidator<any> =>
-  equals(null, message)
-
 export const isNumber = (message?: ValidatorMessage): SyncValidator<any> =>
   all([isType('number'), not(makeValidator(isNaN))], message)
 
-export const isInteger = (message?: ValidatorMessage): SyncValidator<number> =>
-  all([isNumber(), divisibleBy(1)], message)
-
-export const isUndefined = (message?: ValidatorMessage): SyncValidator<any> =>
-  isType('undefined', message)
+export const isDate = (message?: ValidatorMessage): SyncValidator<any> =>
+  all<Date>([instanceOf(Date), (v) => isNumber()(v.getTime())], message)
 
 export const divisibleBy = (
   n: number,
   message?: ValidatorMessage
 ): SyncValidator<number> => makeValidator((v: number) => v % n === 0, message)
+
+export const isInteger = (message?: ValidatorMessage): SyncValidator<number> =>
+  all([isNumber(), divisibleBy(1)], message)
 
 export const max = (
   maxV: number,
