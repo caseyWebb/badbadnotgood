@@ -10,7 +10,6 @@
 [![Coverage Status][codecov-shield]][codecov]
 [![Dependency Status][david-dm-shield]][david-dm]
 [![Dev Dependency Status][david-dm-dev-shield]][david-dm-dev]
-[![Downloads][npm-stats-shield]][npm-stats]
 
 ## Usage
 
