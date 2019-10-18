@@ -1,19 +1,18 @@
 language: node_js
 node_js:
-- stable
-- lts/dubnium
+  - stable
 branches:
   only:
-  - master
-  - "/v\\d+\\.\\d+/"
+    - master
+    - "/v\\d+\\.\\d+/"
 cache:
   yarn: true
 script:
-- yarn lint
-- yarn build
-- yarn test
+  - yarn lint
+  - yarn build
+  - yarn test
 after_script:
-- npx codecov
+  - npx codecov
 notifications:
   email: false
 deploy:
