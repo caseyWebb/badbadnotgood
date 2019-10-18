@@ -24,7 +24,7 @@
 [travis-ci-shield]: https://img.shields.io/travis/caseyWebb/badbadnotgood/master.svg
 [codecov]: https://codecov.io/gh/caseyWebb/badbadnotgood
 [codecov-shield]: https://img.shields.io/codecov/c/github/caseyWebb/badbadnotgood.svg
-[david-dm]: https://david-dm.org/caseyWebb/badbadnotgood#type=peer
-[david-dm-shield]: https://img.shields.io/david/peer/caseyWebb/badbadnotgood.svg
+[david-dm]: https://david-dm.org/caseyWebb/badbadnotgood
+[david-dm-shield]: https://img.shields.io/david/caseyWebb/badbadnotgood.svg
 [david-dm-dev]: https://david-dm.org/caseyWebb/badbadnotgood&type=dev
 [david-dm-dev-shield]: https://david-dm.org/caseyWebb/badbadnotgood/dev-status.svg
