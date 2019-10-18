@@ -1,19 +1,26 @@
 language: node_js
 node_js:
-  - stable
-  - lts/dubnium
+- stable
+- lts/dubnium
 branches:
   only:
-    - master
-    - /v\d+\.\d+/
+  - master
+  - "/v\\d+\\.\\d+/"
 cache:
   yarn: true
 script:
-  - yarn lint
-  - yarn build
-  - yarn test
+- yarn lint
+- yarn build
+- yarn test
 after_script:
-  - npx codecov
+- npx codecov
 notifications:
   email: false
-# add NPM deploy with `travis setup npm`, be sure to set skip_cleanup: true
+deploy:
+  provider: npm
+  email: notcaseywebb@gmail.com
+  api_key:
+    secure: CMOequpQ7WfZQfFbwEdS0ZrW3aEGwX5XGAkaEU/A6H2c5u4fXpTwtBqGmNrRAqqbt193jahrMf47jKerqBiWxLfIbLtSnSJ08aBBNSGZ2IPz5iObGYEUFoO5edjZWOGQPcoivGs7NISAKSZXT97Cb5i3lft3dTXAvQ2LI6Id/CyVIbaXT+JBe+jmzNejB8lHNPs7SZ4BiGY18V3h+QMVnt3wyEgf8u8inWWVEnqdYZodcIRa9rbiLJjOxQ36OSKZWv8ZPw+S408r+C8w1+pDG7LWBuirqFmGLSiWa2uYxsj0erlNZwFv1geyadTSEhlga08j2e6B8sr7LlvTUoVvWBFSuVmM/sPvfGkFgxPYmTZDHu+eNnjM1ywktN3SWKJ3qQ2bK0vHfBDiWNQ9ORx1NwISL/+o21KYt6JEy277N36iXGoDTu3HlheOncUtwFtxiJwdRJnowJCP6soXnLtvdY67VZtRSNikMQEE69wE+HItENgmOWYHJFBF0y+LueOEzg8K4fTG/RUxFQCVtiW+Idb2ZN4EfBHPEk/eQyAI5N91pi1VRIiz1tSRqGlwm50gXJ2mqCGSfjraf43BAiQL+Hb4SZpDE1bwrPnjrQKgG2LkG0Enp9A6TS6LIKughtApXYasEWpQ9LFs+EHncFR2amcvHKB+Q+5LpRqVduzsZrs=
+  on:
+    tags: true
+    repo: caseyWebb/badbadnotgood

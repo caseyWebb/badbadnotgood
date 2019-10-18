@@ -12,11 +12,6 @@
 [![Dev Dependency Status][david-dm-dev-shield]][david-dm-dev]
 [![Downloads][npm-stats-shield]][npm-stats]
 
-## TODO
-
-- [ ] `travis setup npm`
-- [ ] :tada: Profit
-
 [npm-version]: https://npmjs.com/package/badbadnotgood
 [npm-version-shield]: https://img.shields.io/npm/v/badbadnotgood.svg
 [npm-stats]: http://npm-stat.com/charts.html?package=badbadnotgood&author=&from=&to=
