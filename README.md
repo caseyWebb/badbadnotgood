@@ -1,6 +1,6 @@
 # badbadnotgood
 
-> Functional validation, built for composition
+> Functional validation, built for composition.
 
 [![NPM Version][npm-version-shield]][npm-version]
 [![NPM Downloads][npm-stats-shield]][npm-stats]
@@ -11,6 +11,61 @@
 [![Dependency Status][david-dm-shield]][david-dm]
 [![Dev Dependency Status][david-dm-dev-shield]][david-dm-dev]
 [![Downloads][npm-stats-shield]][npm-stats]
+
+## Usage
+
+```typescript
+import {
+  all,
+  any,
+  onlyIf,
+  not,
+  divisibleBy
+  equals,
+  minLength,
+} from 'badbadnotgood'
+
+// Simple validation
+const isFoo = equals('foo')
+isFoo('foo') // { isValid: true, messages: [] }
+isFoo('bar') // { isValid: false, messages: [] }
+
+// With validation messages
+const isFoo = equals('foo', 'Value must be "foo"')
+isFoo('foo') // { isValid: true, messages: [] }
+isFoo('bar') // { isValid: false, messages: ['Value must be "foo"'] }
+
+// Negated
+const isNotFoo = not(equals('foo'), 'Value must not be "foo"')
+isNotFoo('foo') // { isValid: false, messages: ['Value must not be "foo"']}
+isNotFoo('bar') // { isValid: true, messages: [] }
+
+// Composed, with single message
+const isFooOrBar = any(
+  [equals('foo'), equals('bar')],
+  'Value must be "foo" or "bar"'
+)
+isFooOrBar('foo') // { isValid: true, messages: [] }
+isFooOrBar('baz') // { isValid: false, messages: ['Value must be "foo" or "bar"'] }
+
+// Composed, with multiple messages
+const isDivisibleBy3And4 = all([
+  divisibleBy(3, 'Not divisible by 3'),
+  divisibleBy(4, 'Not divisible by 4')
+])
+isDivisibleBy3And4(12) // { isValid: true, messages: [] }
+isDivisibleBy3And4(6) // { isValid: false, messages: ["Not divisible by 4"] }
+isDivisibleBy3And4(1) // { isValid: false, messages: ["Not divisible by 3", "Not divisible by 4"] }
+
+// Conditional validation
+const atLeast6CharsUnlessFoo = onlyIf(
+  not(equals('foo')),
+  minLength(6, 'Must be at least 6 characters')
+)
+atLeast6CharsUnlessFoo('foo') // { isValid: true, messages: [] }
+atLeast6CharsUnlessFoo('bar') // { isValid: false, messages: ["Must be at least 6 characters"] }
+atLeast6CharsUnlessFoo('foobar') // { isValid: true, messages: [] }
+```
 
 [npm-version]: https://npmjs.com/package/badbadnotgood
 [npm-version-shield]: https://img.shields.io/npm/v/badbadnotgood.svg
