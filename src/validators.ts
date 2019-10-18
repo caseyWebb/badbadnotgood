@@ -1,6 +1,6 @@
 import { flow, pick } from 'lodash/fp'
 
-import { all, not, makeValidator } from './utils'
+import { all, any, not, makeValidator } from './utils'
 
 export type ValidatorMessage = string | symbol
 
@@ -11,6 +11,7 @@ export type ValidatorResult = {
 
 export type AsyncValidator<T> = (v: T) => Promise<ValidatorResult>
 export type SyncValidator<T> = (v: T) => ValidatorResult
+// export type Validator<T> = SyncValidator<T> | AsyncValidator<T>
 export type Validator<T> = (v: T) => ValidatorResult | Promise<ValidatorResult>
 
 type ArrayLike = string | any[]
@@ -30,9 +31,25 @@ export const isLength = (
   message?: ValidatorMessage
 ): SyncValidator<ArrayLike> => makeValidator((v) => v.length === l, message)
 
+export const isNullOrUndefined = (
+  message?: ValidatorMessage
+): SyncValidator<any> => all([isUndefined(), isNull()], message)
+
 export const isEmpty = (
   message?: ValidatorMessage
-): SyncValidator<ArrayLike | null | void> => isLength(0, message)
+): SyncValidator<ArrayLike | void | null> =>
+  all(
+    [not(isNullOrUndefined()), isLength(0) as ReturnType<typeof isEmpty>],
+    message
+  )
+
+export const required = isEmpty
+
+export const isArray = (message?: ValidatorMessage): SyncValidator<any> =>
+  makeValidator((v) => Array.isArray(v), message)
+
+export const isArrayLike = (message?: ValidatorMessage): SyncValidator<any> =>
+  any([isType('string'), isArray()], message)
 
 export const isType = (
   t: string,
@@ -40,7 +57,7 @@ export const isType = (
 ): SyncValidator<any> => makeValidator((v: any) => typeof v === t, message)
 
 export const isDate = (message?: ValidatorMessage): SyncValidator<any> =>
-  all([instanceOf(Date), (v: Date) => isNumber()(v.getTime())], message)
+  all<Date>([instanceOf(Date), (v) => isNumber()(v.getTime())], message)
 
 export const isNull = (message?: ValidatorMessage): SyncValidator<any> =>
   equals(null, message)
@@ -49,7 +66,7 @@ export const isNumber = (message?: ValidatorMessage): SyncValidator<any> =>
   all([isType('number'), not(makeValidator(isNaN))], message)
 
 export const isInteger = (message?: ValidatorMessage): SyncValidator<number> =>
-  all([isNumber(), makeValidator((v: number) => v === Math.floor(v))], message)
+  divisibleBy(1, message)
 
 export const isUndefined = (message?: ValidatorMessage): SyncValidator<any> =>
   not(isType('undefined'), message)
@@ -57,8 +74,7 @@ export const isUndefined = (message?: ValidatorMessage): SyncValidator<any> =>
 export const divisibleBy = (
   n: number,
   message?: ValidatorMessage
-): SyncValidator<number> =>
-  all([isNumber(), makeValidator((v: number) => v % n === 0)], message)
+): SyncValidator<number> => makeValidator((v: number) => v % n === 0, message)
 
 export const max = (
   maxV: number,
@@ -93,13 +109,9 @@ export const minLength = (
 export const pattern = (
   p: RegExp,
   message?: ValidatorMessage
-): SyncValidator<string> =>
-  all([isType('string'), makeValidator((v: string) => p.test(v))], message)
+): SyncValidator<string> => makeValidator((v: string) => p.test(v), message)
 
 // very naiive. text parsing should not be relied on for validating emails as there
 // are just too many valid possibilities. just send users an email with a confirmation link.
 export const email = (message?: ValidatorMessage): SyncValidator<string> =>
   pattern(/.+@.+\..+/, message)
-
-export const required = (message: ValidatorMessage): Validator<any> =>
-  all([not(isEmpty()), not(isNull()), not(isUndefined())], message)

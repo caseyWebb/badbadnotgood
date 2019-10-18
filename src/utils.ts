@@ -1,31 +1,124 @@
 import {
   SyncValidator,
+  Validator,
   ValidatorMessage,
   AsyncValidator,
-  Validator,
   ValidatorResult
 } from './validators'
 
 export function all<T>(
   validators: SyncValidator<T>[],
-  message?: ValidatorMessage
+  message?: ValidatorMessage,
+  concurrent?: boolean
 ): SyncValidator<T>
 export function all<T>(
   validators: Validator<T>[],
+  message?: ValidatorMessage,
+  concurrent?: boolean
+): AsyncValidator<T>
+export function all<T>(
+  validators: Validator<T>[],
+  message?: ValidatorMessage,
+  concurrent?: boolean
+): Validator<T> {
+  if (concurrent) {
+    return makeConcurrentComposer<T>(
+      validators,
+      (results) => results.every((res) => res.isValid),
+      message
+    )
+  } else {
+    return _allSeries(validators, message)
+  }
+}
+function _allSeries<T>(
+  validators: SyncValidator<T>[],
+  message?: ValidatorMessage
+): SyncValidator<T>
+function _allSeries<T>(
+  validators: Validator<T>[],
   message?: ValidatorMessage
 ): AsyncValidator<T>
-export function all<T>(validators: Validator<T>[], message?: ValidatorMessage) {
+function _allSeries<T>(
+  validators: Validator<T>[],
+  message?: ValidatorMessage
+): Validator<T> {
   return (v: T) => {
-    function _all(results: ValidatorResult[]): ValidatorResult {
-      const isValid = results.every((res) => res.isValid)
-      const messages = results.flatMap((res) => res.messages)
-      if (message) messages.push(message)
+    for (let i = 0; i < validators.length; i++) {
+      const validate = validators[i]
+      const result = validate(v)
+      if (result instanceof Promise) {
+        return _allSeriesAsync(v, result, validators.slice(i + 1), message)
+      } else if (!result.isValid) {
+        if (message) result.messages.push(message)
+        return result
+      }
+    }
+    return {
+      isValid: true,
+      messages: []
+    }
+  }
+}
+async function _allSeriesAsync<T>(
+  v: T,
+  promise: Promise<ValidatorResult>,
+  validators: Validator<T>[],
+  message?: ValidatorMessage
+): Promise<ValidatorResult> {
+  let result = await promise
+  if (!result.isValid) {
+    if (message) result.messages.push(message)
+    return result
+  }
+  for (const validate of validators) {
+    const result = await validate(v)
+    if (!result.isValid) {
+      if (message) result.messages.push(message)
+      return result
+    }
+  }
+  return {
+    isValid: true,
+    messages: []
+  }
+}
+
+export function any<T>(
+  validators: SyncValidator<T>[],
+  message?: ValidatorMessage
+): SyncValidator<T>
+export function any<T>(
+  validators: Validator<T>[],
+  message?: ValidatorMessage
+): AsyncValidator<T>
+export function any<T>(
+  validators: Validator<T>[],
+  message?: ValidatorMessage
+): Validator<T> {
+  return makeConcurrentComposer<T>(
+    validators,
+    (results) => results.some((res) => res.isValid),
+    message
+  )
+}
+
+function makeConcurrentComposer<T>(
+  validators: Validator<T>[],
+  checkValid: (res: ValidatorResult[]) => boolean,
+  message?: ValidatorMessage
+): Validator<T> {
+  return (v: T) => {
+    function _doWork(results: ValidatorResult[]): ValidatorResult {
+      const isValid = checkValid(results)
+      const messages = isValid ? [] : results.flatMap((r) => r.messages)
+      if (!isValid && message) messages.unshift(message)
       return { isValid, messages }
     }
     const results = validators.map((validate) => validate(v))
-    return results.some(isThenable)
-      ? Promise.all(results).then(_all)
-      : _all(results as ValidatorResult[])
+    return results.some((r) => r instanceof Promise)
+      ? Promise.all(results).then(_doWork)
+      : _doWork(results as ValidatorResult[])
   }
 }
 
@@ -50,9 +143,7 @@ export function not<T>(
   }
   return (v: T) => {
     const results = validator(v)
-    return isThenable(results)
-      ? (results as Promise<ValidatorResult>).then(_not)
-      : _not(results as ValidatorResult)
+    return results instanceof Promise ? results.then(_not) : _not(results)
   }
 }
 
@@ -80,9 +171,9 @@ export function onlyIf<T>(
           }
     }
     const conditionResult = condition(v)
-    return isThenable(conditionResult)
-      ? (conditionResult as Promise<ValidatorResult>).then(_onlyIf)
-      : _onlyIf(conditionResult as ValidatorResult)
+    return conditionResult instanceof Promise
+      ? conditionResult.then(_onlyIf)
+      : _onlyIf(conditionResult)
   }
 }
 
@@ -106,12 +197,8 @@ export function makeValidator<T>(
       }
     }
     const result = validate(v)
-    return isThenable(result)
-      ? (result as Promise<boolean>).then(_makeValidator)
-      : _makeValidator(result as boolean)
+    return result instanceof Promise
+      ? result.then(_makeValidator)
+      : _makeValidator(result)
   }
-}
-
-function isThenable(x: any): boolean {
-  return typeof x.then === 'function'
 }
