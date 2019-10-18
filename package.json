@@ -14,7 +14,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "concurrently --color \"yarn build:cjs\" \"yarn build:esm\"",
+    "build": "concurrently \"npm:build:*\"",
     "build:cjs": "tsc --preserveWatchOutput --module commonjs --outDir dist/cjs --tsBuildInfoFile .cache/cjs.tsbuildinfo",
     "build:esm": "tsc --preserveWatchOutput --module esnext --outDir dist/esm --tsBuildInfoFile .cache/esm.tsbuildinfo",
     "test": "jest",
