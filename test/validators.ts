@@ -21,6 +21,8 @@ import {
   SyncValidator
 } from '../src'
 
+const NO_GOOD = Symbol()
+
 function testValidator<T>(
   name: string,
   validator: SyncValidator<T>,
@@ -29,57 +31,91 @@ function testValidator<T>(
 ) {
   test(name, () => {
     good.forEach((v) => expect(validator(v).isValid).toBe(true))
-    bad.forEach((v) => expect(validator(v).isValid).toBe(false))
+    bad.forEach((v) => {
+      const { isValid, messages } = validator(v)
+      expect(isValid).toBe(false)
+      expect(messages[0]).toBe(NO_GOOD)
+    })
   })
 }
 
-testValidator('equals', equals('foo'), ['foo'], ['bar'])
+testValidator('equals', equals('foo', NO_GOOD), ['foo'], ['bar'])
 
 class Foo {}
 class SubFoo extends Foo {}
 class Bar {}
 testValidator(
   'instanceOf',
-  instanceOf(Foo),
+  instanceOf(Foo, NO_GOOD),
   [new Foo(), new SubFoo()],
   [Foo, new Bar()]
 )
 
-testValidator('isLength', isLength(3), ['abc', [1, 2, 3]], ['aoeu', [1, 2]])
+testValidator(
+  'isLength',
+  isLength(3, NO_GOOD),
+  ['abc', [1, 2, 3]],
+  ['aoeu', [1, 2]]
+)
 
 testValidator(
   'isEmpty',
-  isEmpty(),
+  isEmpty(NO_GOOD),
   ['', [], null, undefined],
   [1, false, 'foo', [1]]
 )
 
-testValidator('isType', isType('string'), ['abc'], [123])
+testValidator('isType', isType('string', NO_GOOD), ['abc'], [123])
 
-testValidator('isDate', isDate(), [new Date()], [new Date('foobar'), 'abc'])
+testValidator(
+  'isDate',
+  isDate(NO_GOOD),
+  [new Date()],
+  [new Date('foobar'), 'abc']
+)
 
-testValidator('isNull', isNull(), [null], [undefined, false, 123, 'abc'])
+testValidator('isNull', isNull(NO_GOOD), [null], [undefined, false, 123, 'abc'])
 
-testValidator('isArray', isArray(), [[]], ['aoeu', true, 1])
+testValidator('isArray', isArray(NO_GOOD), [[]], ['aoeu', true, 1])
 
-testValidator('isArrayLike', isArrayLike(), [[], ''], [true, 1])
+testValidator('isArrayLike', isArrayLike(NO_GOOD), [[], ''], [true, 1])
 
-testValidator('isNumber', isNumber(), [123, 123.456], ['abc', []])
+testValidator('isNumber', isNumber(NO_GOOD), [123, 123.456], ['abc', []])
 
-testValidator('isInteger', isInteger(), [123], [123.456, 'abc', []])
+testValidator('isInteger', isInteger(NO_GOOD), [123], [123.456, 'abc', []])
 
-testValidator('isUndefined', isUndefined(), [undefined], [null, false, [], 0])
+testValidator(
+  'isUndefined',
+  isUndefined(NO_GOOD),
+  [undefined],
+  [null, false, [], 0]
+)
 
-testValidator('divisibleBy', divisibleBy(3), [0, 3, 6, 9], [1, 'abc'])
+testValidator('divisibleBy', divisibleBy(3, NO_GOOD), [0, 3, 6, 9], [1, 'abc'])
 
-testValidator('max', max(1), [0, 1], [2])
+testValidator('max', max(1, NO_GOOD), [0, 1], [2])
 
-testValidator('min', min(1), [1, 2], [0])
+testValidator('min', min(1, NO_GOOD), [1, 2], [0])
 
-testValidator('maxLength', maxLength(1), [[], ['foo'], 'f'], [[1, 2], 'foo'])
+testValidator(
+  'maxLength',
+  maxLength(1, NO_GOOD),
+  [[], ['foo'], 'f'],
+  [[1, 2], 'foo']
+)
 
-testValidator('minLength', minLength(1), [[1, 2], ['foo'], 'f'], [[], ''])
+testValidator(
+  'minLength',
+  minLength(1, NO_GOOD),
+  [[1, 2], ['foo'], 'f'],
+  [[], '']
+)
 
-testValidator('pattern', pattern(/[aoeu]+/), ['aoeu', 'ueoa'], ['snth'])
+testValidator(
+  'pattern',
+  pattern(/[aoeu]+/, NO_GOOD),
+  ['aoeu', 'ueoa'],
+  ['snth']
+)
 
-testValidator('email', email(), ['notcaseywebb@gmail.com'], ['foo'])
+testValidator('email', email(NO_GOOD), ['notcaseywebb@gmail.com'], ['foo'])

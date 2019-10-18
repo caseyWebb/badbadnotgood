@@ -1,4 +1,5 @@
-import { all, any, not, makeValidator } from './utils'
+import { all, any } from './composers'
+import { not, makeValidator } from './utils'
 
 export type ValidatorMessage = string | symbol
 
