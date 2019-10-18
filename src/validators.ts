@@ -1,5 +1,3 @@
-import { flow, pick } from 'lodash/fp'
-
 import { all, any, not, makeValidator } from './utils'
 
 export type ValidatorMessage = string | symbol
@@ -31,15 +29,11 @@ export const isLength = (
   message?: ValidatorMessage
 ): SyncValidator<ArrayLike> => makeValidator((v) => v.length === l, message)
 
-export const isNullOrUndefined = (
-  message?: ValidatorMessage
-): SyncValidator<any> => all([isUndefined(), isNull()], message)
-
 export const isEmpty = (
   message?: ValidatorMessage
 ): SyncValidator<ArrayLike | void | null> =>
-  all(
-    [not(isNullOrUndefined()), isLength(0) as ReturnType<typeof isEmpty>],
+  any(
+    [isNull(), isUndefined(), isLength(0) as ReturnType<typeof isEmpty>],
     message
   )
 
@@ -66,10 +60,10 @@ export const isNumber = (message?: ValidatorMessage): SyncValidator<any> =>
   all([isType('number'), not(makeValidator(isNaN))], message)
 
 export const isInteger = (message?: ValidatorMessage): SyncValidator<number> =>
-  divisibleBy(1, message)
+  all([isNumber(), divisibleBy(1)], message)
 
 export const isUndefined = (message?: ValidatorMessage): SyncValidator<any> =>
-  not(isType('undefined'), message)
+  isType('undefined', message)
 
 export const divisibleBy = (
   n: number,
@@ -88,23 +82,15 @@ export const min = (
 ): SyncValidator<number> =>
   all([isNumber(), makeValidator((v: number) => v >= minV)], message)
 
-const getLength = pick('length')
 export const maxLength = (
   maxL: number,
   message?: ValidatorMessage
-): SyncValidator<ArrayLike> =>
-  flow(
-    getLength,
-    max(maxL, message)
-  )
+): SyncValidator<ArrayLike> => (v: ArrayLike) => max(maxL, message)(v.length)
+
 export const minLength = (
   minL: number,
   message?: ValidatorMessage
-): SyncValidator<ArrayLike> =>
-  flow(
-    getLength,
-    min(minL, message)
-  )
+): SyncValidator<ArrayLike> => (v: ArrayLike) => min(minL, message)(v.length)
 
 export const pattern = (
   p: RegExp,
@@ -114,4 +100,4 @@ export const pattern = (
 // very naiive. text parsing should not be relied on for validating emails as there
 // are just too many valid possibilities. just send users an email with a confirmation link.
 export const email = (message?: ValidatorMessage): SyncValidator<string> =>
-  pattern(/.+@.+\..+/, message)
+  pattern(/.+@.+/, message)

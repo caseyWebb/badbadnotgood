@@ -22,88 +22,67 @@ export function all<T>(
   concurrent?: boolean
 ): Validator<T> {
   if (concurrent) {
-    return makeConcurrentComposer<T>(
+    return _makeConcurrentComposer<T>(
       validators,
       (results) => results.every((res) => res.isValid),
       message
     )
   } else {
-    return _allSeries(validators, message)
-  }
-}
-function _allSeries<T>(
-  validators: SyncValidator<T>[],
-  message?: ValidatorMessage
-): SyncValidator<T>
-function _allSeries<T>(
-  validators: Validator<T>[],
-  message?: ValidatorMessage
-): AsyncValidator<T>
-function _allSeries<T>(
-  validators: Validator<T>[],
-  message?: ValidatorMessage
-): Validator<T> {
-  return (v: T) => {
-    for (let i = 0; i < validators.length; i++) {
-      const validate = validators[i]
-      const result = validate(v)
-      if (result instanceof Promise) {
-        return _allSeriesAsync(v, result, validators.slice(i + 1), message)
-      } else if (!result.isValid) {
-        if (message) result.messages.push(message)
-        return result
-      }
-    }
-    return {
-      isValid: true,
-      messages: []
-    }
-  }
-}
-async function _allSeriesAsync<T>(
-  v: T,
-  promise: Promise<ValidatorResult>,
-  validators: Validator<T>[],
-  message?: ValidatorMessage
-): Promise<ValidatorResult> {
-  let result = await promise
-  if (!result.isValid) {
-    if (message) result.messages.push(message)
-    return result
-  }
-  for (const validate of validators) {
-    const result = await validate(v)
-    if (!result.isValid) {
-      if (message) result.messages.push(message)
-      return result
-    }
-  }
-  return {
-    isValid: true,
-    messages: []
+    return _makeSeriesComposer<T>(
+      validators,
+      (res) => {
+        if (!res.isValid) {
+          return res
+        }
+      },
+      () => ({
+        isValid: true,
+        messages: []
+      }),
+      message
+    )
   }
 }
 
 export function any<T>(
   validators: SyncValidator<T>[],
-  message?: ValidatorMessage
+  message?: ValidatorMessage,
+  concurrent?: boolean
 ): SyncValidator<T>
 export function any<T>(
   validators: Validator<T>[],
-  message?: ValidatorMessage
+  message?: ValidatorMessage,
+  concurrent?: boolean
 ): AsyncValidator<T>
 export function any<T>(
   validators: Validator<T>[],
-  message?: ValidatorMessage
+  message?: ValidatorMessage,
+  concurrent?: boolean
 ): Validator<T> {
-  return makeConcurrentComposer<T>(
-    validators,
-    (results) => results.some((res) => res.isValid),
-    message
-  )
+  if (concurrent) {
+    return _makeConcurrentComposer<T>(
+      validators,
+      (results) => results.some((res) => res.isValid),
+      message
+    )
+  } else {
+    return _makeSeriesComposer<T>(
+      validators,
+      (res) => {
+        if (res.isValid) {
+          return res
+        }
+      },
+      (results) => ({
+        isValid: false,
+        messages: results.flatMap((res) => res.messages)
+      }),
+      message
+    )
+  }
 }
 
-function makeConcurrentComposer<T>(
+function _makeConcurrentComposer<T>(
   validators: Validator<T>[],
   checkValid: (res: ValidatorResult[]) => boolean,
   message?: ValidatorMessage
@@ -120,6 +99,68 @@ function makeConcurrentComposer<T>(
       ? Promise.all(results).then(_doWork)
       : _doWork(results as ValidatorResult[])
   }
+}
+
+function _makeSeriesComposer<T>(
+  validators: Validator<T>[],
+  checkForReturn: (res: ValidatorResult) => void | ValidatorResult,
+  defaultReturn: (results: ValidatorResult[]) => ValidatorResult,
+  message?: ValidatorMessage
+): Validator<T> {
+  return (v: T) => {
+    const results: ValidatorResult[] = []
+    for (let i = 0; i < validators.length; i++) {
+      const validate = validators[i]
+      const result = validate(v)
+      if (result instanceof Promise) {
+        return _asyncSeriesIterator(
+          v,
+          result,
+          validators.slice(i + 1),
+          checkForReturn,
+          (restResults) => defaultReturn([...results, ...restResults]),
+          message
+        )
+      } else {
+        const ret = checkForReturn(result)
+        results.push(result)
+        if (ret) {
+          if (message) result.messages.push(message)
+          return ret
+        }
+      }
+    }
+    return defaultReturn(results)
+  }
+}
+async function _asyncSeriesIterator<T>(
+  v: T,
+  promise: Promise<ValidatorResult>,
+  validators: Validator<T>[],
+  checkForReturn: (res: ValidatorResult) => void | ValidatorResult,
+  defaultReturn: (results: ValidatorResult[]) => ValidatorResult,
+  message?: ValidatorMessage
+): Promise<ValidatorResult> {
+  const results: ValidatorResult[] = []
+  {
+    const result = await promise
+    const ret = checkForReturn(result)
+    results.push(result)
+    if (ret) {
+      if (message) ret.messages.push(message)
+      return ret
+    }
+  }
+  for (const validate of validators) {
+    const result = await validate(v)
+    const ret = checkForReturn(result)
+    results.push(result)
+    if (ret) {
+      if (message) ret.messages.push(message)
+      return ret
+    }
+  }
+  return defaultReturn(results)
 }
 
 export function not<T>(
