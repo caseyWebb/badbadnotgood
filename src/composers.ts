@@ -129,7 +129,7 @@ function _makeSeriesComposer<T>(
       }
     }
     if (!ret) ret = defaultReturn(results)
-    if (message) ret.messages.push(message)
+    if (!ret.isValid && message) ret.messages.unshift(message)
     return ret
   }
 }
@@ -154,6 +154,6 @@ async function _asyncSeriesIterator<T>(
     }
   }
   if (!ret) ret = defaultReturn(results)
-  if (message) ret.messages.push(message)
+  if (!ret.isValid && message) ret.messages.unshift(message)
   return ret
 }
