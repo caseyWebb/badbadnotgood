@@ -25,7 +25,7 @@ const NO_GOOD = Symbol()
 
 function testValidator<T>(
   name: string,
-  validator: SyncValidator<T>,
+  validator: SyncValidator<T, symbol>,
   good: T[],
   bad: any[]
 ) {

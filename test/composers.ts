@@ -6,7 +6,7 @@ describe('all', () => {
     const NOT_DIVISIBLE_BY_4 = Symbol()
     const NOT_DIVISIBLE_BY_3_AND_4 = Symbol()
 
-    let validator = all(
+    let validator = all<number, symbol>(
       [divisibleBy(3, NOT_DIVISIBLE_BY_3), divisibleBy(4, NOT_DIVISIBLE_BY_4)],
       NOT_DIVISIBLE_BY_3_AND_4
     )
@@ -26,7 +26,7 @@ describe('all', () => {
       NOT_DIVISIBLE_BY_3
     ])
 
-    validator = all(
+    validator = all<number, symbol>(
       [divisibleBy(3, NOT_DIVISIBLE_BY_3), divisibleBy(4, NOT_DIVISIBLE_BY_4)],
       NOT_DIVISIBLE_BY_3_AND_4,
       true
@@ -59,7 +59,7 @@ describe('any', () => {
     const NOT_DIVISIBLE_BY_4 = Symbol()
     const NOT_DIVISIBLE_BY_3_OR_4 = Symbol()
 
-    let validator = any(
+    let validator = any<number, symbol>(
       [divisibleBy(3, NOT_DIVISIBLE_BY_3), divisibleBy(4, NOT_DIVISIBLE_BY_4)],
       NOT_DIVISIBLE_BY_3_OR_4
     )
@@ -77,7 +77,7 @@ describe('any', () => {
       NOT_DIVISIBLE_BY_4
     ])
 
-    validator = any(
+    validator = any<number, symbol>(
       [divisibleBy(3, NOT_DIVISIBLE_BY_3), divisibleBy(4, NOT_DIVISIBLE_BY_4)],
       NOT_DIVISIBLE_BY_3_OR_4,
       true
@@ -102,7 +102,7 @@ describe('any', () => {
 })
 
 function testSeriality(
-  composer: (validators: Validator<any>[]) => Validator<string>
+  composer: (validators: Validator<any, any>[]) => Validator<string, any>
 ) {
   test('validators run in series by default', async () => {
     jest.useFakeTimers()
@@ -132,10 +132,10 @@ function testSeriality(
 
 function testConcurrency(
   composer: (
-    validators: Validator<any>[],
+    validators: Validator<any, any>[],
     message: string,
     concurrent: boolean
-  ) => Validator<string>
+  ) => Validator<string, any>
 ) {
   test('validators run concurrently when collecting all messages', async () => {
     jest.useFakeTimers()

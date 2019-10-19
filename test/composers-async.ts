@@ -3,14 +3,13 @@ import {
   any,
   makeValidator,
   AsyncValidator,
-  ValidatorMessage,
   ValidatorResult
 } from '../src'
 
-const divisibleBy = (
+const divisibleBy = <TMessage>(
   n: number,
-  message?: ValidatorMessage
-): AsyncValidator<number> =>
+  message?: TMessage
+): AsyncValidator<number, TMessage> =>
   makeValidator((v: number) => Promise.resolve(v % n === 0), message)
 
 describe('all', () => {
@@ -19,11 +18,11 @@ describe('all', () => {
     const NOT_DIVISIBLE_BY_4 = Symbol()
     const NOT_DIVISIBLE_BY_3_AND_4 = Symbol()
 
-    let validator = all(
+    let validator = all<number, symbol>(
       [divisibleBy(3, NOT_DIVISIBLE_BY_3), divisibleBy(4, NOT_DIVISIBLE_BY_4)],
       NOT_DIVISIBLE_BY_3_AND_4
     )
-    let result: ValidatorResult
+    let result: ValidatorResult<symbol>
 
     result = await validator(12)
     expect(result.isValid).toBe(true)
@@ -43,7 +42,7 @@ describe('all', () => {
       NOT_DIVISIBLE_BY_3
     ])
 
-    validator = all(
+    validator = all<number, symbol>(
       [divisibleBy(3, NOT_DIVISIBLE_BY_3), divisibleBy(4, NOT_DIVISIBLE_BY_4)],
       NOT_DIVISIBLE_BY_3_AND_4,
       true
@@ -76,11 +75,11 @@ describe('any', () => {
     const NOT_DIVISIBLE_BY_4 = Symbol()
     const NOT_DIVISIBLE_BY_3_OR_4 = Symbol()
 
-    let validator = any(
+    let validator = any<number, symbol>(
       [divisibleBy(3, NOT_DIVISIBLE_BY_3), divisibleBy(4, NOT_DIVISIBLE_BY_4)],
       NOT_DIVISIBLE_BY_3_OR_4
     )
-    let result: ValidatorResult
+    let result: ValidatorResult<symbol>
 
     result = await validator(12)
     expect(result.isValid).toBe(true)
@@ -98,7 +97,7 @@ describe('any', () => {
       NOT_DIVISIBLE_BY_4
     ])
 
-    validator = any(
+    validator = any<number, symbol>(
       [divisibleBy(3, NOT_DIVISIBLE_BY_3), divisibleBy(4, NOT_DIVISIBLE_BY_4)],
       NOT_DIVISIBLE_BY_3_OR_4,
       true

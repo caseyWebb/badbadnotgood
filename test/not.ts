@@ -14,7 +14,7 @@ test('works with async validator', async () => {
   const asyncAlwaysTrueValidator = makeValidator(() => Promise.resolve(true))
   const asyncAlwaysFalseValidator = makeValidator(() => Promise.resolve(false))
 
-  let validator: Validator<any>
+  let validator: Validator<any, any>
 
   validator = not(asyncAlwaysTrueValidator)
   expect((await validator('')).isValid).toBe(false)

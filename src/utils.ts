@@ -1,24 +1,23 @@
 import {
   SyncValidator,
   Validator,
-  ValidatorMessage,
   AsyncValidator,
   ValidatorResult
 } from './validators'
 
-export function not<T>(
-  validator: SyncValidator<T>,
-  message?: ValidatorMessage
-): SyncValidator<T>
-export function not<T>(
-  validator: Validator<T>,
-  message?: ValidatorMessage
-): AsyncValidator<T>
-export function not<T>(
-  validator: Validator<T>,
-  message?: ValidatorMessage
-): Validator<T> {
-  function _not(result: ValidatorResult): ValidatorResult {
+export function not<T, TMessage>(
+  validator: SyncValidator<T, TMessage>,
+  message?: TMessage
+): SyncValidator<T, TMessage>
+export function not<T, TMessage>(
+  validator: Validator<T, TMessage>,
+  message?: TMessage
+): AsyncValidator<T, TMessage>
+export function not<T, TMessage>(
+  validator: Validator<T, TMessage>,
+  message?: TMessage
+): Validator<T, TMessage> {
+  function _not(result: ValidatorResult<TMessage>): ValidatorResult<TMessage> {
     const isValid = !result.isValid
     return {
       isValid,
@@ -31,22 +30,22 @@ export function not<T>(
   }
 }
 
-export function onlyIf<T>(
-  condition: SyncValidator<T>,
-  validator: SyncValidator<T>
-): SyncValidator<T>
-export function onlyIf<T>(
-  condition: Validator<T>,
-  validator: Validator<T>
-): AsyncValidator<T>
-export function onlyIf<T>(
-  condition: Validator<T>,
-  validator: Validator<T>
-): Validator<T> {
+export function onlyIf<T, TMessage>(
+  condition: SyncValidator<T, TMessage>,
+  validator: SyncValidator<T, TMessage>
+): SyncValidator<T, TMessage>
+export function onlyIf<T, TMessage>(
+  condition: Validator<T, TMessage>,
+  validator: Validator<T, TMessage>
+): AsyncValidator<T, TMessage>
+export function onlyIf<T, TMessage>(
+  condition: Validator<T, TMessage>,
+  validator: Validator<T, TMessage>
+): Validator<T, TMessage> {
   return (v: T) => {
     function _onlyIf(
-      shouldValidate: ValidatorResult
-    ): ValidatorResult | Promise<ValidatorResult> {
+      shouldValidate: ValidatorResult<TMessage>
+    ): ValidatorResult<TMessage> | Promise<ValidatorResult<TMessage>> {
       return shouldValidate.isValid
         ? validator(v)
         : {
@@ -61,20 +60,20 @@ export function onlyIf<T>(
   }
 }
 
-export function makeValidator<T>(
+export function makeValidator<T, TMessage>(
   validate: (v: T) => boolean,
-  message?: ValidatorMessage
-): SyncValidator<T>
-export function makeValidator<T>(
+  message?: TMessage
+): SyncValidator<T, TMessage>
+export function makeValidator<T, TMessage>(
   validate: (v: T) => Promise<boolean>,
-  message?: ValidatorMessage
-): AsyncValidator<T>
-export function makeValidator<T>(
+  message?: TMessage
+): AsyncValidator<T, TMessage>
+export function makeValidator<T, TMessage>(
   validate: (v: T) => boolean | Promise<boolean>,
-  message?: ValidatorMessage
-): Validator<T> {
+  message?: TMessage
+): Validator<T, TMessage> {
   return (v: T) => {
-    function _makeValidator(isValid: boolean): ValidatorResult {
+    function _makeValidator(isValid: boolean): ValidatorResult<TMessage> {
       return {
         isValid,
         messages: isValid || !message ? [] : [message]
