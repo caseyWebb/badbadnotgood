@@ -5,6 +5,78 @@ import {
   ValidatorResult
 } from './validators'
 
+export type ForeachValidatorResult<TMessage> = {
+  index: number
+  messages: TMessage[]
+}
+
+export function forEach<
+  T,
+  TMessage,
+  TValidatorMessage extends TMessage | never
+>(
+  validator: SyncValidator<T, TValidatorMessage>,
+  message?: TMessage
+): SyncValidator<
+  T[],
+  TValidatorMessage extends never
+    ? TMessage
+    : TMessage | ForeachValidatorResult<TMessage>
+>
+export function forEach<
+  T,
+  TMessage,
+  TValidatorMessage extends TMessage | never
+>(
+  validator: Validator<T, TValidatorMessage>,
+  message?: TMessage
+): AsyncValidator<
+  T[],
+  TValidatorMessage extends never
+    ? TMessage
+    : TMessage | ForeachValidatorResult<TMessage>
+>
+export function forEach<
+  T,
+  TMessage,
+  TValidatorMessage extends TMessage | never
+>(
+  validator: Validator<T, TValidatorMessage>,
+  message?: TMessage
+): Validator<
+  T[],
+  TValidatorMessage extends never
+    ? TMessage
+    : TMessage | ForeachValidatorResult<TMessage>
+> {
+  function _forEach(
+    results: ValidatorResult<TMessage>[]
+  ): ValidatorResult<
+    TValidatorMessage extends never
+      ? TMessage
+      : TMessage | ForeachValidatorResult<TMessage>
+  > {
+    const isValid = results.every((r) => r.isValid)
+    const messages: (TMessage | ForeachValidatorResult<TMessage>)[] = isValid
+      ? []
+      : results
+          .map((r, index) => ({ messages: r.messages, index }))
+          .filter(({ messages }) => messages.length > 0)
+    if (!isValid && message) messages.unshift(message)
+    return {
+      isValid,
+      messages: messages as any
+    }
+  }
+  return (arr: T[]) => {
+    const results = arr.map(validator)
+
+    return results.some((r) => r instanceof Promise)
+      ? Promise.all(results).then(_forEach)
+      : _forEach(results as ValidatorResult<TMessage>[])
+  }
+}
+
 export function not<T, TMessage>(
   validator: SyncValidator<T, TMessage>,
   message?: TMessage
