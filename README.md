@@ -30,9 +30,9 @@ isFoo('foo') // { isValid: true, messages: [] }
 isFoo('bar') // { isValid: false, messages: [] }
 
 // With validation messages
-const isFoo = equals('foo', 'Value must be "foo"')
-isFoo('foo') // { isValid: true, messages: [] }
-isFoo('bar') // { isValid: false, messages: ['Value must be "foo"'] }
+const isBar = equals('bar', 'Value must be "bar"')
+isFoo('foo') // { isValid: false, messages: ['Value must be "bar"'] }
+isFoo('bar') // { isValid: true, messages: [] }
 
 // Negated
 const isNotFoo = not(equals('foo'), 'Value must not be "foo"')
@@ -64,6 +64,11 @@ const atLeast6CharsUnlessFoo = onlyIf(
 atLeast6CharsUnlessFoo('foo') // { isValid: true, messages: [] }
 atLeast6CharsUnlessFoo('bar') // { isValid: false, messages: ["Must be at least 6 characters"] }
 atLeast6CharsUnlessFoo('foobar') // { isValid: true, messages: [] }
+
+// Arrays
+const allAreFoo = forEach(equals('foo', 'Item is not "foo"'), 'All items must be "foo"')
+allAreFoo(['foo']) // { isValid: true, messages: [] }
+allAreFoo(['foo', 'bar']) // { isValid: false, messages: ['All items must be "foo"', { index: 1, messages: ['Item is not "foo"] }] }
 ```
 
 [npm-version]: https://npmjs.com/package/badbadnotgood
