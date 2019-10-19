@@ -10,6 +10,59 @@ export type ForeachValidatorResult<TMessage> = {
   messages: TMessage[]
 }
 
+export type PropertyValidatorResult<T, TMessage> = {
+  property: keyof T
+  messages: TMessage[]
+}
+
+export function prop<
+  T extends Record<string, any>,
+  TMessage,
+  TValidatorMessage extends TMessage | never = TMessage | never,
+  P extends keyof T = keyof T
+>(
+  propertyName: P,
+  validator: SyncValidator<T[P], TValidatorMessage>,
+  message?: TMessage
+): SyncValidator<T, TMessage | PropertyValidatorResult<T, TMessage>>
+export function prop<
+  T extends Record<string, any>,
+  TMessage,
+  TValidatorMessage extends TMessage | never = TMessage | never,
+  P extends keyof T = keyof T
+>(
+  propertyName: P,
+  validator: Validator<T[P], TValidatorMessage>,
+  message?: TMessage
+): Validator<T, TMessage | PropertyValidatorResult<T, TMessage>>
+export function prop<
+  T extends Record<string, any>,
+  TMessage,
+  TValidatorMessage extends TMessage | never = TMessage | never,
+  P extends keyof T = keyof T
+>(
+  propertyName: P,
+  validator: Validator<T[P], TValidatorMessage>,
+  message?: TMessage
+): Validator<T, TMessage | PropertyValidatorResult<T, TMessage>> {
+  function _prop(res: ValidatorResult<TMessage>) {
+    const messages: (
+      | TMessage
+      | PropertyValidatorResult<T, TMessage>)[] = res.isValid
+      ? []
+      : [{ property: propertyName, messages: res.messages }]
+    if (!res.isValid && message) messages.unshift(message)
+    return {
+      isValid: res.isValid,
+      messages
+    }
+  }
+  return (v: T) => {
+    const results = validator(v[propertyName])
+    return results instanceof Promise ? results.then(_prop) : _prop(results)
+  }
+}
+
 export function forEach<
   T,
   TMessage,

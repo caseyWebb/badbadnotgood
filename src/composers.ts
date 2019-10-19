@@ -1,3 +1,4 @@
+import { PropertyValidatorResult, prop } from './utils'
 import {
   SyncValidator,
   Validator,
@@ -41,6 +42,31 @@ export function all<T, TMessage>(
       message
     )
   }
+}
+
+type SyncSchema<T extends Record<string, any>, TMessage> = {
+  [P in keyof T]: SyncValidator<T[P], TMessage>
+}
+type Schema<T extends Record<string, any>, TMessage> = {
+  [P in keyof T]: Validator<T[P], TMessage>
+}
+
+export function schema<T, TMessage>(
+  schema: SyncSchema<T, TMessage>,
+  message?: TMessage
+): SyncValidator<T, TMessage | PropertyValidatorResult<T, TMessage>>
+export function schema<T, TMessage>(
+  schema: Schema<T, TMessage>,
+  message?: TMessage
+): AsyncValidator<T, TMessage | PropertyValidatorResult<T, TMessage>>
+export function schema<T, TMessage>(
+  schema: Schema<T, TMessage>,
+  message?: TMessage
+): Validator<T, TMessage | PropertyValidatorResult<T, TMessage>> {
+  return all(
+    Object.keys(schema).map((k) => prop(k as keyof T, schema[k as keyof T])),
+    message
+  )
 }
 
 export function any<T, TMessage>(
