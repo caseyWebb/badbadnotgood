@@ -39,13 +39,14 @@ describe('all', () => {
     expect(result.isValid).toBe(false)
     expect(result.messages).toEqual([
       NOT_DIVISIBLE_BY_3_AND_4,
-      NOT_DIVISIBLE_BY_3
+      NOT_DIVISIBLE_BY_3,
+      NOT_DIVISIBLE_BY_4
     ])
 
     validator = all<number, symbol>(
       [divisibleBy(3, NOT_DIVISIBLE_BY_3), divisibleBy(4, NOT_DIVISIBLE_BY_4)],
       NOT_DIVISIBLE_BY_3_AND_4,
-      true
+      false
     )
 
     result = await validator(12)
@@ -63,8 +64,7 @@ describe('all', () => {
     expect(result.isValid).toBe(false)
     expect(result.messages).toEqual([
       NOT_DIVISIBLE_BY_3_AND_4,
-      NOT_DIVISIBLE_BY_3,
-      NOT_DIVISIBLE_BY_4
+      NOT_DIVISIBLE_BY_3
     ])
   })
 })

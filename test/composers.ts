@@ -23,13 +23,14 @@ describe('all', () => {
     expect(validator(1).isValid).toBe(false)
     expect(validator(1).messages).toEqual([
       NOT_DIVISIBLE_BY_3_AND_4,
-      NOT_DIVISIBLE_BY_3
+      NOT_DIVISIBLE_BY_3,
+      NOT_DIVISIBLE_BY_4
     ])
 
     validator = all<number, symbol>(
       [divisibleBy(3, NOT_DIVISIBLE_BY_3), divisibleBy(4, NOT_DIVISIBLE_BY_4)],
       NOT_DIVISIBLE_BY_3_AND_4,
-      true
+      false
     )
 
     expect(validator(12).isValid).toBe(true)
@@ -44,8 +45,7 @@ describe('all', () => {
     expect(validator(1).isValid).toBe(false)
     expect(validator(1).messages).toEqual([
       NOT_DIVISIBLE_BY_3_AND_4,
-      NOT_DIVISIBLE_BY_3,
-      NOT_DIVISIBLE_BY_4
+      NOT_DIVISIBLE_BY_3
     ])
   })
 
@@ -101,43 +101,10 @@ describe('any', () => {
   testConcurrency(any)
 })
 
-function testSeriality(
+function testConcurrency(
   composer: (validators: Validator<any, any>[]) => Validator<string, any>
 ) {
-  test('validators run in series by default', async () => {
-    jest.useFakeTimers()
-
-    const spy = jest.fn()
-    const first = makeValidator(
-      () =>
-        new Promise<boolean>((resolve) =>
-          setTimeout(() => {
-            spy()
-            resolve(true)
-          }, 2000)
-        )
-    )
-    const second = makeValidator(() => {
-      expect(spy).toBeCalled()
-      return true
-    })
-    const validator = composer([first, second])
-    const p = validator('')
-
-    jest.runAllTimers()
-
-    await p
-  })
-}
-
-function testConcurrency(
-  composer: (
-    validators: Validator<any, any>[],
-    message: string,
-    concurrent: boolean
-  ) => Validator<string, any>
-) {
-  test('validators run concurrently when collecting all messages', async () => {
+  test('composer collects all messages by default (concurrent)', async () => {
     jest.useFakeTimers()
 
     const spy = jest.fn()
@@ -154,7 +121,40 @@ function testConcurrency(
       expect(spy).not.toBeCalled()
       return true
     })
-    const validator = composer([first, second], '', true)
+    const validator = composer([first, second])
+    const p = validator('')
+
+    jest.runAllTimers()
+
+    await p
+  })
+}
+
+function testSeriality(
+  composer: (
+    validators: Validator<any, any>[],
+    message: any,
+    concurrent: boolean
+  ) => Validator<string, any>
+) {
+  test('validators can optionally fast-fail (series)', async () => {
+    jest.useFakeTimers()
+
+    const spy = jest.fn()
+    const first = makeValidator(
+      () =>
+        new Promise<boolean>((resolve) =>
+          setTimeout(() => {
+            spy()
+            resolve(true)
+          }, 2000)
+        )
+    )
+    const second = makeValidator(() => {
+      expect(spy).toBeCalled()
+      return true
+    })
+    const validator = composer([first, second], '', false)
     const p = validator('')
 
     jest.runAllTimers()

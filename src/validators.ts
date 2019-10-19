@@ -76,14 +76,15 @@ export const isArrayLike = <TMessage = never>(
 export const isNumber = <TMessage = never>(
   message?: TMessage
 ): SyncValidator<any, TMessage> =>
-  all([isType('number'), not(makeValidator(isNaN))], message)
+  all([isType('number'), not(makeValidator(isNaN))], message, false)
 
 export const isDate = <TMessage = never>(
   message?: TMessage
 ): SyncValidator<any, TMessage> =>
   all<Date, TMessage>(
     [instanceOf(Date), (v) => isNumber()(v.getTime())],
-    message
+    message,
+    false
   )
 
 export const divisibleBy = <TMessage = never>(
@@ -94,19 +95,20 @@ export const divisibleBy = <TMessage = never>(
 
 export const isInteger = <TMessage = never>(
   message?: TMessage
-): SyncValidator<number, TMessage> => all([isNumber(), divisibleBy(1)], message)
+): SyncValidator<number, TMessage> =>
+  all([isNumber(), divisibleBy(1)], message, false)
 
 export const max = <TMessage = never>(
   maxV: number,
   message?: TMessage
 ): SyncValidator<number, TMessage> =>
-  all([isNumber(), makeValidator((v: number) => v <= maxV)], message)
+  all([isNumber(), makeValidator((v: number) => v <= maxV)], message, false)
 
 export const min = <TMessage = never>(
   minV: number,
   message?: TMessage
 ): SyncValidator<number, TMessage> =>
-  all([isNumber(), makeValidator((v: number) => v >= minV)], message)
+  all([isNumber(), makeValidator((v: number) => v >= minV)], message, false)
 
 export const maxLength = <TMessage = never>(
   maxL: number,

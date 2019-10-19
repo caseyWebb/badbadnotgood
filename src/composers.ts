@@ -18,7 +18,7 @@ export function all<T, TMessage>(
 export function all<T, TMessage>(
   validators: Validator<T, TMessage>[],
   message?: TMessage,
-  concurrent?: boolean
+  concurrent = true
 ): Validator<T, TMessage> {
   if (concurrent) {
     return _composeConcurrent<T, TMessage>(
