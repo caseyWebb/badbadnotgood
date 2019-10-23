@@ -189,6 +189,18 @@ export function onlyIf<T, TMessage>(
   }
 }
 
+export function invoke<T, TMessage, TArgs extends any[] | never[]>(
+  validator: SyncValidator<T, TMessage>,
+  args?: TArgs
+): SyncValidator<(...args: TArgs) => T, TMessage>
+export function invoke<T, TMessage, TArgs extends any[] | never[]>(
+  validator: Validator<T, TMessage>,
+  args?: TArgs
+): Validator<(...args: TArgs) => T, TMessage> {
+  return (getV: (...args: TArgs) => T) =>
+    validator(getV(...(args ? args : ([] as TArgs))))
+}
+
 export function makeValidator<T, TMessage>(
   validate: (v: T) => boolean,
   message?: TMessage
