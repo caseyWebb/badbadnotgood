@@ -156,22 +156,24 @@ export function not<T, TMessage>(
 }
 
 export function onlyIf<T, TMessage>(
-  condition: SyncValidator<T, TMessage>,
+  condition: SyncValidator<T, TMessage> | ((v: T) => boolean),
   validator: SyncValidator<T, TMessage>
 ): SyncValidator<T, TMessage>
 export function onlyIf<T, TMessage>(
-  condition: Validator<T, TMessage>,
+  condition: Validator<T, TMessage> | ((v: T) => boolean | Promise<boolean>),
   validator: Validator<T, TMessage>
 ): AsyncValidator<T, TMessage>
 export function onlyIf<T, TMessage>(
-  condition: Validator<T, TMessage>,
+  condition: ((v: T) => boolean | Promise<boolean>) | Validator<T, TMessage>,
   validator: Validator<T, TMessage>
 ): Validator<T, TMessage> {
   return (v: T) => {
     function _onlyIf(
-      shouldValidate: ValidatorResult<TMessage>
+      result: boolean | ValidatorResult<TMessage>
     ): ValidatorResult<TMessage> | Promise<ValidatorResult<TMessage>> {
-      return shouldValidate.isValid
+      const shouldValidate =
+        typeof result === 'boolean' ? result : result.isValid
+      return shouldValidate
         ? validator(v)
         : {
             isValid: true,
@@ -180,7 +182,9 @@ export function onlyIf<T, TMessage>(
     }
     const conditionResult = condition(v)
     return conditionResult instanceof Promise
-      ? conditionResult.then(_onlyIf)
+      ? (conditionResult as Promise<boolean | ValidatorResult<TMessage>>).then(
+          _onlyIf
+        )
       : _onlyIf(conditionResult)
   }
 }
