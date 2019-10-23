@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/caseyWebb/badbadnotgood/compare/v0.0.3...v0.0.4) (2019-10-23)
+
+### Features
+
+- accept bare callback for first argument of onlyIf ([2aba7b3](https://github.com/caseyWebb/badbadnotgood/commit/2aba7b3))
+
 ### [0.0.3](https://github.com/caseyWebb/badbadnotgood/compare/v0.0.2...v0.0.3) (2019-10-19)
 
 ### Features
