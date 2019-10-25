@@ -9,7 +9,7 @@
   "bugs": "https://github.com/caseyWebb/badbadnotgood/issues",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "typings": "dist/esm/index.d.ts",
+  "types": "dist/esm/index.d.ts",
   "files": [
     "dist"
   ],
@@ -17,7 +17,9 @@
     "build": "concurrently \"npm:build:*\"",
     "build:cjs": "tsc --preserveWatchOutput --module commonjs --outDir dist/cjs --tsBuildInfoFile .cache/cjs.tsbuildinfo",
     "build:esm": "tsc --preserveWatchOutput --module esnext --outDir dist/esm --tsBuildInfoFile .cache/esm.tsbuildinfo",
-    "test": "jest",
+    "test": "concurrently \"npm:test:*\"",
+    "test:unit": "jest",
+    "test:types": "tsd",
     "lint": "esw --color --ignore-path .gitignore --ext .js,.ts ./",
     "format": "pretty-quick",
     "release": "standard-version --sign && git push --follow-tags"
@@ -66,11 +68,15 @@
       "js"
     ],
     "testMatch": [
-      "**/test/**"
+      "**/test/**",
+      "!**/*-d.ts"
     ],
     "transform": {
       "^.+\\.ts$": "ts-jest"
     }
+  },
+  "tsd": {
+    "directory": "test"
   },
   "prettier": {
     "arrowParens": "always",
@@ -99,6 +105,7 @@
     "standard-version": "^7.0.0",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
+    "tsd": "caseyWebb/tsd#master",
     "typescript": "^3.6.4"
   }
 }
