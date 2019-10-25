@@ -4,8 +4,7 @@ import {
   forEach,
   minLength,
   ForeachValidatorResult,
-  ValidatorResult,
-  Validator
+  ValidatorResult
 } from '../src'
 
 test('works as expected', () => {
