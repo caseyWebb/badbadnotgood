@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/caseyWebb/badbadnotgood/compare/v0.0.6...v0.0.7) (2019-10-29)
+
+### Bug Fixes
+
+- **validators:** required should be inverse of ifEmpty ([2f694c1](https://github.com/caseyWebb/badbadnotgood/commit/2f694c1))
+
 ### [0.0.6](https://github.com/caseyWebb/badbadnotgood/compare/v0.0.4...v0.0.6) (2019-10-25)
 
 ### Features
