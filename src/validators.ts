@@ -62,7 +62,9 @@ export const isEmpty = <TMessage = never>(
     message
   )
 
-export const required = isEmpty
+export const required = <TMessage = never>(
+  message?: TMessage
+): SyncValidator<any, TMessage> => not(isEmpty(), message)
 
 export const isArray = <TMessage = never>(
   message?: TMessage

@@ -17,6 +17,7 @@ import {
   maxLength,
   minLength,
   pattern,
+  required,
   email,
   SyncValidator
 } from '../src'
@@ -63,6 +64,13 @@ testValidator(
   isEmpty(NO_GOOD),
   ['', [], null, undefined],
   [1, false, 'foo', [1]]
+)
+
+testValidator(
+  'required',
+  required(NO_GOOD),
+  [1, false, 'foo', [1]],
+  ['', [], null, undefined]
 )
 
 testValidator('isType', isType('string', NO_GOOD), ['abc'], [123])
