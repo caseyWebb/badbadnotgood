@@ -7,17 +7,19 @@
   "homepage": "https://github.com/caseyWebb/badbadnotgood#readme",
   "repository": "git+https://github.com/caseyWebb/badbadnotgood.git",
   "bugs": "https://github.com/caseyWebb/badbadnotgood/issues",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
+  "main": "dist/node/index.js",
+  "module": "dist/default/index.js",
+  "types": "dist/default/index.d.ts",
+  "esnext": "dist/esnext/index.js",
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "concurrently \"npm:build:*\"",
-    "build:cjs": "tsc --preserveWatchOutput --module commonjs --outDir dist/cjs --tsBuildInfoFile .cache/cjs.tsbuildinfo",
-    "build:esm": "tsc --preserveWatchOutput --module esnext --outDir dist/esm --tsBuildInfoFile .cache/esm.tsbuildinfo",
-    "test": "concurrently \"npm:test:*\"",
+    "build:node": "tsc --preserveWatchOutput --module commonjs --target es2017 --outDir dist/node --tsBuildInfoFile .cache/node.tsbuildinfo",
+    "build:default": "tsc --preserveWatchOutput --module esnext --outDir dist/default --tsBuildInfoFile .cache/default.tsbuildinfo",
+    "build:esnext": "tsc --preserveWatchOutput --module esnext --target esnext --outDir dist/esnext --tsBuildInfoFile .cache/esnext.tsbuildinfo",
+    "test": "concurrently \"npm:build:*\"",
     "test:unit": "jest",
     "test:types": "tsd",
     "lint": "esw --color --ignore-path .gitignore --ext .js,.ts ./",
@@ -50,7 +52,7 @@
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "yarn format --staged",
-      "pre-push": "yarn lint && yarn build:esm --noEmit"
+      "pre-push": "yarn lint && yarn build:default --noEmit"
     }
   },
   "jest": {

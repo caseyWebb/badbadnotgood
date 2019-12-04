@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "incremental": true,
-    "target": "es2015",
+    "target": "es5",
     "lib": ["es2015", "es2019.array"],
     "declaration": true,
     "sourceMap": true,

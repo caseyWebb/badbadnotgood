@@ -17,6 +17,7 @@ export type PropertyValidatorResult<T, TMessage> = {
 }
 
 export function prop<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends Record<string, any>,
   TMessage,
   TValidatorMessage extends TMessage | never = TMessage | never,
@@ -27,6 +28,7 @@ export function prop<
   message?: TMessage
 ): SyncValidator<T, TMessage | PropertyValidatorResult<T, TMessage>>
 export function prop<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends Record<string, any>,
   TMessage,
   TValidatorMessage extends TMessage | never = TMessage | never,
@@ -37,6 +39,7 @@ export function prop<
   message?: TMessage
 ): Validator<T, TMessage | PropertyValidatorResult<T, TMessage>>
 export function prop<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends Record<string, any>,
   TMessage,
   TValidatorMessage extends TMessage | never = TMessage | never,
@@ -46,10 +49,13 @@ export function prop<
   validator: Validator<T[P], TValidatorMessage>,
   message?: TMessage
 ): Validator<T, TMessage | PropertyValidatorResult<T, TMessage>> {
-  function _prop(res: ValidatorResult<TMessage>) {
+  function _prop(
+    res: ValidatorResult<TMessage>
+  ): ValidatorResult<TMessage | PropertyValidatorResult<T, TMessage>> {
     const messages: (
       | TMessage
-      | PropertyValidatorResult<T, TMessage>)[] = res.isValid
+      | PropertyValidatorResult<T, TMessage>
+    )[] = res.isValid
       ? []
       : [{ property: propertyName, messages: res.messages }]
     if (!res.isValid && message) messages.unshift(message)
@@ -96,7 +102,8 @@ export function forEach<T, TMessage, TValidatorMessage>(
     const allAreValid = results.every((r) => r.isValid)
     const messages: (
       | TMessage
-      | ForeachValidatorResult<TValidatorMessage>)[] = allAreValid
+      | ForeachValidatorResult<TValidatorMessage>
+    )[] = allAreValid
       ? []
       : results
           .map((r, index) => ({ index, ...r }))
@@ -175,10 +182,12 @@ export function onlyIf<T, TMessage>(
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function invoke<T, TMessage, TArgs extends any[] | never[]>(
   validator: SyncValidator<T, TMessage>,
   args?: TArgs
 ): SyncValidator<(...args: TArgs) => T, TMessage>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function invoke<T, TMessage, TArgs extends any[] | never[]>(
   validator: Validator<T, TMessage>,
   args?: TArgs
