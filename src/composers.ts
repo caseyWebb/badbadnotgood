@@ -44,9 +44,11 @@ export function all<T, TMessage>(
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SyncSchema<T extends Record<string, any>, TMessage> = {
   [P in keyof T]: SyncValidator<T[P], TMessage>
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Schema<T extends Record<string, any>, TMessage> = {
   [P in keyof T]: Validator<T[P], TMessage>
 }
