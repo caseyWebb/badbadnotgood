@@ -6052,7 +6052,7 @@ ts-node@^8.4.1:
     source-map-support "^0.5.6"
     yn "^3.0.0"
 
-tsd@caseyWebb/tsd#master:
+tsd@caseyWebb/tsd#v10.0.1-caseyWebb:
   version "0.10.0"
   resolved "https://codeload.github.com/caseyWebb/tsd/tar.gz/428f18a8dbdb2d94b126ce970e8b84f2b83f2428"
   dependencies:

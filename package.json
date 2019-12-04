@@ -105,7 +105,7 @@
     "standard-version": "^7.0.0",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
-    "tsd": "caseyWebb/tsd#master",
+    "tsd": "caseyWebb/tsd#v10.0.1-caseyWebb",
     "typescript": "^3.6.4"
   }
 }
