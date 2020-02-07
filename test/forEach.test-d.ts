@@ -1,4 +1,5 @@
 import { expectType } from 'tsd'
+
 import { forEach, equals, SyncValidator, ForeachValidatorResult } from '../src'
 
 expectType<SyncValidator<string[], ForeachValidatorResult<never>>>(
