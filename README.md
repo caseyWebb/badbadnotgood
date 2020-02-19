@@ -85,5 +85,5 @@ allAreFoo(['foo', 'bar']) // { isValid: false, messages: ['All items must be "fo
 [codecov-shield]: https://img.shields.io/codecov/c/github/caseyWebb/badbadnotgood.svg
 [david-dm]: https://david-dm.org/caseyWebb/badbadnotgood
 [david-dm-shield]: https://img.shields.io/david/caseyWebb/badbadnotgood.svg
-[david-dm-dev]: https://david-dm.org/caseyWebb/badbadnotgood&type=dev
-[david-dm-dev-shield]: https://david-dm.org/caseyWebb/badbadnotgood/dev-status.svg
+[david-dm-dev]: https://david-dm.org/caseyWebb/badbadnotgood?type=dev
+[david-dm-dev-shield]: https://img.shields.io/david/dev/caseyWebb/badbadnotgood
