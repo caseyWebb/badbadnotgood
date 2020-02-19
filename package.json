@@ -19,7 +19,7 @@
     "build:node": "tsc --preserveWatchOutput --module commonjs --target es2017 --outDir dist/node --tsBuildInfoFile .cache/node.tsbuildinfo",
     "build:default": "tsc --preserveWatchOutput --module esnext --outDir dist/default --tsBuildInfoFile .cache/default.tsbuildinfo",
     "build:esnext": "tsc --preserveWatchOutput --module esnext --target esnext --outDir dist/esnext --tsBuildInfoFile .cache/esnext.tsbuildinfo",
-    "test": "concurrently \"npm:build:*\"",
+    "test": "concurrently \"npm:test:*\"",
     "test:unit": "jest",
     "test:types": "tsd",
     "lint": "esw --color --ignore-path .gitignore --ext .js,.ts ./",
