@@ -20,10 +20,9 @@ export type Validator<T, TMessage> = (
 type ArrayLike = string | any[]
 
 export const equals = <T, TMessage = never>(
-  target: T | (() => T),
+  target: T,
   message?: TMessage
-): SyncValidator<T, TMessage> =>
-  makeValidator((v) => (typeof v === 'function' ? v() : v) === target, message)
+): SyncValidator<T, TMessage> => makeValidator((v) => v === target, message)
 
 export const instanceOf = <T, TMessage = never>(
   proto: new () => T,
@@ -58,7 +57,7 @@ export const isEmpty = <TMessage = never>(
     [
       isNull(),
       isUndefined(),
-      isLength(0) as SyncValidator<ArrayLike | void | null, never>,
+      isLength(0) as SyncValidator<ArrayLike | void | null, never>
     ],
     message
   )
