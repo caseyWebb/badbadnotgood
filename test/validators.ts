@@ -1,5 +1,6 @@
 import {
   equals,
+  equalsInvoke,
   instanceOf,
   isLength,
   isEmpty,
@@ -19,7 +20,7 @@ import {
   pattern,
   required,
   email,
-  SyncValidator
+  SyncValidator,
 } from '../src'
 
 const NO_GOOD = Symbol()
@@ -41,6 +42,13 @@ function testValidator<T>(
 }
 
 testValidator('equals', equals('foo', NO_GOOD), ['foo'], ['bar'])
+
+testValidator(
+  'equalsInvoke',
+  equalsInvoke(() => 'foo', NO_GOOD),
+  ['foo'],
+  ['bar']
+)
 
 class Foo {}
 class SubFoo extends Foo {}

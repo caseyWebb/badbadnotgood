@@ -24,6 +24,11 @@ export const equals = <T, TMessage = never>(
   message?: TMessage
 ): SyncValidator<T, TMessage> => makeValidator((v) => v === target, message)
 
+export const equalsInvoke = <T, TMessage = never>(
+  target: () => T,
+  message?: TMessage
+): SyncValidator<T, TMessage> => makeValidator((v) => v === target(), message)
+
 export const instanceOf = <T, TMessage = never>(
   proto: new () => T,
   message?: TMessage
@@ -57,7 +62,7 @@ export const isEmpty = <TMessage = never>(
     [
       isNull(),
       isUndefined(),
-      isLength(0) as SyncValidator<ArrayLike | void | null, never>
+      isLength(0) as SyncValidator<ArrayLike | void | null, never>,
     ],
     message
   )
