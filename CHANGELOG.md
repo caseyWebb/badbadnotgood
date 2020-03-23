@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://github.com/caseyWebb/badbadnotgood/compare/v0.0.9...v0.0.10) (2020-03-23)
+
+### Features
+
+- **validators:** add equalsInvoke validator ([9a23355](https://github.com/caseyWebb/badbadnotgood/commit/9a233558ec49b0f3125318029eac67165cce5944))
+
 ### [0.0.8](https://github.com/caseyWebb/badbadnotgood/compare/v0.0.7...v0.0.8) (2019-12-04)
 
 ### [0.0.7](https://github.com/caseyWebb/badbadnotgood/compare/v0.0.6...v0.0.7) (2019-10-29)
