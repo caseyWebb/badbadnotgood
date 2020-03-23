@@ -9,5 +9,5 @@ test('works as expected', () => {
 test('can pass arguments', () => {
   const identity = (v: string) => v
   const returnsArg = invoke<string, any, [string]>(equals('foo'), ['foo'])
-  expect(returnsArg(identity))
+  expect(returnsArg(identity).isValid).toBe(true)
 })
