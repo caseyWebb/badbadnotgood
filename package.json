@@ -52,7 +52,7 @@
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "yarn format --staged",
-      "pre-push": "yarn lint && yarn build:default --noEmit"
+      "pre-push": "yarn lint && yarn build:default"
     }
   },
   "jest": {
