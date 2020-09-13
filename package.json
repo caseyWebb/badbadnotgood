@@ -104,7 +104,7 @@
     "jest": "^26.4.2",
     "prettier": "^2.0.1",
     "pretty-quick": "^3.0.0",
-    "standard-version": "^8.0.0",
+    "standard-version": "^9.0.0",
     "ts-jest": "^25.0.0",
     "ts-node": "^9.0.0",
     "tsd": "caseyWebb/tsd#v10.0.1-caseyWebb",
