@@ -94,7 +94,7 @@
     "@types/jest": "^26.0.10",
     "@types/lodash": "^4.14.144",
     "@types/node": "^13.1.2",
-    "commitlint": "^9.1.2",
+    "commitlint": "^11.0.0",
     "concurrently": "^5.0.0",
     "cz-conventional-changelog": "^3.0.2",
     "eslint": "^6.5.1",
