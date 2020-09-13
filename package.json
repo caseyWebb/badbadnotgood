@@ -108,6 +108,6 @@
     "ts-jest": "^26.3.0",
     "ts-node": "^9.0.0",
     "tsd": "caseyWebb/tsd#v10.0.1-caseyWebb",
-    "typescript": "^3.6.4"
+    "typescript": "^4.0.2"
   }
 }
