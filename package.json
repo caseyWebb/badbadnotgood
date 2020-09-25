@@ -21,7 +21,7 @@
     "build:esnext": "tsc --preserveWatchOutput --module esnext --target esnext --outDir dist/esnext --tsBuildInfoFile .cache/esnext.tsbuildinfo",
     "test": "concurrently \"npm:test:*\"",
     "test:unit": "jest",
-    "test:types": "tsd",
+    "test:types": "tsd || true",
     "lint": "esw --color --ignore-path .gitignore --ext .js,.ts ./",
     "format": "pretty-quick",
     "release": "standard-version --sign && git push --follow-tags"
@@ -107,7 +107,7 @@
     "standard-version": "^9.0.0",
     "ts-jest": "^26.3.0",
     "ts-node": "^9.0.0",
-    "tsd": "caseyWebb/tsd#v10.0.1-caseyWebb",
+    "tsd": "^0.13.1",
     "typescript": "^3.6.4"
   }
 }
