@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/caseyWebb/badbadnotgood/compare/v0.0.11...v1.0.0) (2020-10-06)
+
+
+### Bug Fixes
+
+* date unit test race condition ([39308cc](https://github.com/caseyWebb/badbadnotgood/commit/39308ccb05c26fe37b64151fc13056a25c35b197))
+
 ### [0.0.11](https://github.com/caseyWebb/badbadnotgood/compare/v0.0.10...v0.0.11) (2020-10-06)
 
 ### Bug Fixes
