@@ -97,6 +97,7 @@
     "commitlint": "^11.0.0",
     "concurrently": "^5.0.0",
     "cz-conventional-changelog": "^3.0.2",
+    "date-fns": "^2.16.1",
     "eslint": "^7.10.0",
     "eslint-config-profiscience": "^6.0.0",
     "eslint-watch": "^7.0.0",

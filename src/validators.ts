@@ -105,17 +105,43 @@ export const isInteger = <TMessage = never>(
 ): SyncValidator<number, TMessage> =>
   all([isNumber(), divisibleBy(1)], message, false)
 
-export const max = <TMessage = never>(
+export function max<TMessage = never>(
+  maxV: Date,
+  message?: TMessage
+): SyncValidator<Date, TMessage>
+export function max<TMessage = never>(
   maxV: number,
   message?: TMessage
-): SyncValidator<number, TMessage> =>
-  all([isNumber(), makeValidator((v: number) => v <= maxV)], message, false)
-
-export const min = <TMessage = never>(
-  minV: number,
+): SyncValidator<number, TMessage>
+export function max<TMessage = never>(
+  maxV: Date | number,
   message?: TMessage
-): SyncValidator<number, TMessage> =>
-  all([isNumber(), makeValidator((v: number) => v >= minV)], message, false)
+): SyncValidator<any, TMessage> {
+  return all(
+    [any([isNumber(), isDate()]), makeValidator((v: number) => v <= maxV)],
+    message,
+    false
+  )
+}
+
+export function min<TMessage = never>(
+  maxV: Date,
+  message?: TMessage
+): SyncValidator<Date, TMessage>
+export function min<TMessage = never>(
+  maxV: number,
+  message?: TMessage
+): SyncValidator<number, TMessage>
+export function min<TMessage = never>(
+  minV: Date | number,
+  message?: TMessage
+): SyncValidator<any, TMessage> {
+  return all(
+    [any([isNumber(), isDate()]), makeValidator((v: number) => v >= minV)],
+    message,
+    false
+  )
+}
 
 export const maxLength = <TMessage = never>(
   maxL: number,

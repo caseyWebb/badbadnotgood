@@ -1,3 +1,4 @@
+import { addDays, subDays } from 'date-fns'
 import {
   equals,
   equalsInvoke,
@@ -110,8 +111,20 @@ testValidator(
 testValidator('divisibleBy', divisibleBy(3, NO_GOOD), [0, 3, 6, 9], [1, 'abc'])
 
 testValidator('max', max(1, NO_GOOD), [0, 1], [2])
+testValidator(
+  'max',
+  max(new Date(), NO_GOOD),
+  [subDays(new Date(), 1), new Date()],
+  [addDays(new Date(), 1)]
+)
 
 testValidator('min', min(1, NO_GOOD), [1, 2], [0])
+testValidator(
+  'min',
+  min(new Date(), NO_GOOD),
+  [addDays(new Date(), 1), new Date()],
+  [subDays(new Date(), 1)]
+)
 
 testValidator(
   'maxLength',
