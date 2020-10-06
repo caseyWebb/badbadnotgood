@@ -4,7 +4,7 @@ import {
   not,
   onlyIf,
   makeValidator,
-  Validator
+  Validator,
 } from '../src'
 
 test('works with sync validator', () => {

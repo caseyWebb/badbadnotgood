@@ -3,7 +3,7 @@ import {
   any,
   makeValidator,
   AsyncValidator,
-  ValidatorResult
+  ValidatorResult,
 } from '../src'
 
 const divisibleBy = <TMessage>(
@@ -32,7 +32,7 @@ describe('all', () => {
     expect(result.isValid).toBe(false)
     expect(result.messages).toEqual([
       NOT_DIVISIBLE_BY_3_AND_4,
-      NOT_DIVISIBLE_BY_4
+      NOT_DIVISIBLE_BY_4,
     ])
 
     result = await validator(1)
@@ -40,7 +40,7 @@ describe('all', () => {
     expect(result.messages).toEqual([
       NOT_DIVISIBLE_BY_3_AND_4,
       NOT_DIVISIBLE_BY_3,
-      NOT_DIVISIBLE_BY_4
+      NOT_DIVISIBLE_BY_4,
     ])
 
     validator = all<number, symbol>(
@@ -57,14 +57,14 @@ describe('all', () => {
     expect(result.isValid).toBe(false)
     expect(result.messages).toEqual([
       NOT_DIVISIBLE_BY_3_AND_4,
-      NOT_DIVISIBLE_BY_4
+      NOT_DIVISIBLE_BY_4,
     ])
 
     result = await validator(1)
     expect(result.isValid).toBe(false)
     expect(result.messages).toEqual([
       NOT_DIVISIBLE_BY_3_AND_4,
-      NOT_DIVISIBLE_BY_3
+      NOT_DIVISIBLE_BY_3,
     ])
   })
 })
@@ -94,7 +94,7 @@ describe('any', () => {
     expect(result.messages).toEqual([
       NOT_DIVISIBLE_BY_3_OR_4,
       NOT_DIVISIBLE_BY_3,
-      NOT_DIVISIBLE_BY_4
+      NOT_DIVISIBLE_BY_4,
     ])
 
     validator = any<number, symbol>(
@@ -116,7 +116,7 @@ describe('any', () => {
     expect(result.messages).toEqual([
       NOT_DIVISIBLE_BY_3_OR_4,
       NOT_DIVISIBLE_BY_3,
-      NOT_DIVISIBLE_BY_4
+      NOT_DIVISIBLE_BY_4,
     ])
   })
 })

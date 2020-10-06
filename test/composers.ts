@@ -17,14 +17,14 @@ describe('all', () => {
     expect(validator(6).isValid).toBe(false)
     expect(validator(6).messages).toEqual([
       NOT_DIVISIBLE_BY_3_AND_4,
-      NOT_DIVISIBLE_BY_4
+      NOT_DIVISIBLE_BY_4,
     ])
 
     expect(validator(1).isValid).toBe(false)
     expect(validator(1).messages).toEqual([
       NOT_DIVISIBLE_BY_3_AND_4,
       NOT_DIVISIBLE_BY_3,
-      NOT_DIVISIBLE_BY_4
+      NOT_DIVISIBLE_BY_4,
     ])
 
     validator = all<number, symbol>(
@@ -39,13 +39,13 @@ describe('all', () => {
     expect(validator(6).isValid).toBe(false)
     expect(validator(6).messages).toEqual([
       NOT_DIVISIBLE_BY_3_AND_4,
-      NOT_DIVISIBLE_BY_4
+      NOT_DIVISIBLE_BY_4,
     ])
 
     expect(validator(1).isValid).toBe(false)
     expect(validator(1).messages).toEqual([
       NOT_DIVISIBLE_BY_3_AND_4,
-      NOT_DIVISIBLE_BY_3
+      NOT_DIVISIBLE_BY_3,
     ])
   })
 
@@ -74,7 +74,7 @@ describe('any', () => {
     expect(validator(1).messages).toEqual([
       NOT_DIVISIBLE_BY_3_OR_4,
       NOT_DIVISIBLE_BY_3,
-      NOT_DIVISIBLE_BY_4
+      NOT_DIVISIBLE_BY_4,
     ])
 
     validator = any<number, symbol>(
@@ -93,7 +93,7 @@ describe('any', () => {
     expect(validator(1).messages).toEqual([
       NOT_DIVISIBLE_BY_3_OR_4,
       NOT_DIVISIBLE_BY_3,
-      NOT_DIVISIBLE_BY_4
+      NOT_DIVISIBLE_BY_4,
     ])
   })
 

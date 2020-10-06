@@ -2,7 +2,7 @@ import {
   SyncValidator,
   Validator,
   AsyncValidator,
-  ValidatorResult
+  ValidatorResult,
 } from './validators'
 
 export type ForeachValidatorResult<TMessage> = {
@@ -61,7 +61,7 @@ export function prop<
     if (!res.isValid && message) messages.unshift(message)
     return {
       isValid: res.isValid,
-      messages
+      messages,
     }
   }
   return (v: T) => {
@@ -111,7 +111,7 @@ export function forEach<T, TMessage, TValidatorMessage>(
     if (!allAreValid && message) messages.unshift(message)
     return {
       isValid: allAreValid,
-      messages: messages
+      messages: messages,
     }
   }
   return (arr: T[]) => {
@@ -139,7 +139,7 @@ export function not<T, TMessage>(
     const isValid = !result.isValid
     return {
       isValid,
-      messages: isValid || !message ? [] : [message]
+      messages: isValid || !message ? [] : [message],
     }
   }
   return (v: T) => {
@@ -170,7 +170,7 @@ export function onlyIf<T, TMessage>(
         ? validator(v)
         : {
             isValid: true,
-            messages: []
+            messages: [],
           }
     }
     const conditionResult = condition(v)
@@ -212,7 +212,7 @@ export function makeValidator<T, TMessage>(
     function _makeValidator(isValid: boolean): ValidatorResult<TMessage> {
       return {
         isValid,
-        messages: isValid || !message ? [] : [message]
+        messages: isValid || !message ? [] : [message],
       }
     }
     const result = validate(v)

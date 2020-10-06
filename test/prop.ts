@@ -3,7 +3,7 @@ import {
   equals,
   ValidatorResult,
   PropertyValidatorResult,
-  schema
+  schema,
 } from '../src'
 
 test('works as expected', () => {
@@ -26,7 +26,7 @@ test('works as expected', () => {
   expect(results.isValid).toBe(false)
   expect(results.messages).toEqual([
     PROP_IS_INVALID,
-    { property: 'foo', messages: [PROP_IS_NOT_FOO] }
+    { property: 'foo', messages: [PROP_IS_NOT_FOO] },
   ])
 })
 
@@ -49,6 +49,6 @@ test('validateObject composer', () => {
   expect(results.isValid).toBe(false)
   expect(results.messages).toEqual([
     OBJECT_IS_INVALID,
-    { property: 'foo', messages: [PROP_IS_NOT_FOO] }
+    { property: 'foo', messages: [PROP_IS_NOT_FOO] },
   ])
 })

@@ -3,7 +3,7 @@ import {
   SyncValidator,
   Validator,
   AsyncValidator,
-  ValidatorResult
+  ValidatorResult,
 } from './validators'
 
 export function all<T, TMessage>(
@@ -37,7 +37,7 @@ export function all<T, TMessage>(
       },
       () => ({
         isValid: true,
-        messages: []
+        messages: [],
       }),
       message
     )
@@ -102,7 +102,7 @@ export function any<T, TMessage>(
       },
       (results) => ({
         isValid: false,
-        messages: results.flatMap((res) => res.messages)
+        messages: results.flatMap((res) => res.messages),
       }),
       message
     )

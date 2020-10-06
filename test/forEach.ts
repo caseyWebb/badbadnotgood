@@ -4,7 +4,7 @@ import {
   forEach,
   minLength,
   ForeachValidatorResult,
-  ValidatorResult
+  ValidatorResult,
 } from '../src'
 
 test('works as expected', () => {
@@ -16,7 +16,7 @@ test('works as expected', () => {
   const validator = all<string[], symbol | ForeachValidatorResult<symbol>>(
     [
       minLength(3, MIN_LENGTH_NOT_MET),
-      forEach<string, symbol>(isFoo, NOT_ALL_FOOS)
+      forEach<string, symbol>(isFoo, NOT_ALL_FOOS),
     ],
     undefined,
     true
@@ -33,7 +33,7 @@ test('works as expected', () => {
   expect(result.messages).toEqual([
     MIN_LENGTH_NOT_MET,
     NOT_ALL_FOOS,
-    { index: 1, isValid: false, messages: [NOT_FOO] }
+    { index: 1, isValid: false, messages: [NOT_FOO] },
   ])
 
   result = validator(['foo', 'bar', 'baz'])
@@ -41,7 +41,7 @@ test('works as expected', () => {
   expect(result.messages).toEqual([
     NOT_ALL_FOOS,
     { index: 1, isValid: false, messages: [NOT_FOO] },
-    { index: 2, isValid: false, messages: [NOT_FOO] }
+    { index: 2, isValid: false, messages: [NOT_FOO] },
   ])
 
   result = validator(['foo', 'foo', 'foo'])
