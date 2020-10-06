@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.11](https://github.com/caseyWebb/badbadnotgood/compare/v0.0.10...v0.0.11) (2020-10-06)
+
+### Bug Fixes
+
+- add types for Date to min/max validators ([c8b7560](https://github.com/caseyWebb/badbadnotgood/commit/c8b7560eb446d5ce939d4590998659c5806d0236))
+
 ### [0.0.10](https://github.com/caseyWebb/badbadnotgood/compare/v0.0.9...v0.0.10) (2020-03-23)
 
 ### Features
