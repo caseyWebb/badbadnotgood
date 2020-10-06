@@ -111,20 +111,22 @@ testValidator(
 
 testValidator('divisibleBy', divisibleBy(3, NO_GOOD), [0, 3, 6, 9], [1, 'abc'])
 
+const now = new Date()
+
 testValidator('max', max(1, NO_GOOD), [0, 1], [2])
 testValidator(
   'max',
-  max(new Date(), NO_GOOD),
-  [subDays(new Date(), 1), new Date()],
-  [addDays(new Date(), 1)]
+  max(now, NO_GOOD),
+  [subDays(now, 1), now],
+  [addDays(now, 1)]
 )
 
 testValidator('min', min(1, NO_GOOD), [1, 2], [0])
 testValidator(
   'min',
-  min(new Date(), NO_GOOD),
-  [addDays(new Date(), 1), new Date()],
-  [subDays(new Date(), 1)]
+  min(now, NO_GOOD),
+  [addDays(now, 1), now],
+  [subDays(now, 1)]
 )
 
 testValidator(
