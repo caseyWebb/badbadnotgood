@@ -91,7 +91,7 @@
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^13.1.0",
-    "@types/jest": "^26.0.14",
+    "@types/jest": "^27.0.3",
     "@types/lodash": "^4.14.161",
     "@types/node": "^16.11.12",
     "commitlint": "^13.1.0",
