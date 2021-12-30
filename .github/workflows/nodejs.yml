@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [12.x, 13.x, 14.x, 16.x, 17.x]
 
     steps:
       - uses: actions/checkout@v1
@@ -16,10 +16,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: yarn install, build, and test
+      - name: yarn install, build, lint, and test
         run: |
           yarn install
           yarn build
+          yarn lint
           yarn test
         env:
           CI: true
