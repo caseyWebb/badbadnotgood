@@ -78,6 +78,6 @@ allAreFoo(['foo', 'bar']) // { isValid: false, messages: ['All items must be "fo
 [typescript]: https://www.typescriptlang.org/
 [typescript-shield]: https://img.shields.io/badge/definitions-TypeScript-blue.svg
 [build-status]: https://github.com/caseyWebb/badbadnotgood/actions/workflows/nodejs.yml
-[build-status-shield]: https://img.shields.io/travis/caseyWebb/badbadnotgood/master.svg
+[build-status-shield]: https://img.shields.io/github/workflow/status/caseyWebb/badbadnotgood/Node%20CI/master
 [codecov]: https://codecov.io/gh/caseyWebb/badbadnotgood
 [codecov-shield]: https://img.shields.io/codecov/c/github/caseyWebb/badbadnotgood.svg
