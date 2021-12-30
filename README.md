@@ -6,10 +6,8 @@
 [![NPM Downloads][npm-stats-shield]][npm-stats]
 [![License][license-shield]][license]
 [![TypeScript][typescript-shield]][typescript]
-[![Build Status][travis-ci-shield]][travis-ci]
+[![Build Status][build-status-shield]][build-status]
 [![Coverage Status][codecov-shield]][codecov]
-[![Dependency Status][david-dm-shield]][david-dm]
-[![Dev Dependency Status][david-dm-dev-shield]][david-dm-dev]
 
 ## Usage
 
@@ -79,11 +77,7 @@ allAreFoo(['foo', 'bar']) // { isValid: false, messages: ['All items must be "fo
 [license-shield]: https://img.shields.io/npm/l/badbadnotgood.svg
 [typescript]: https://www.typescriptlang.org/
 [typescript-shield]: https://img.shields.io/badge/definitions-TypeScript-blue.svg
-[travis-ci]: https://travis-ci.org/caseyWebb/badbadnotgood/
-[travis-ci-shield]: https://img.shields.io/travis/caseyWebb/badbadnotgood/master.svg
+[build-status]: https://github.com/caseyWebb/badbadnotgood/actions/workflows/nodejs.yml
+[build-status-shield]: https://img.shields.io/travis/caseyWebb/badbadnotgood/master.svg
 [codecov]: https://codecov.io/gh/caseyWebb/badbadnotgood
 [codecov-shield]: https://img.shields.io/codecov/c/github/caseyWebb/badbadnotgood.svg
-[david-dm]: https://david-dm.org/caseyWebb/badbadnotgood
-[david-dm-shield]: https://img.shields.io/david/caseyWebb/badbadnotgood.svg
-[david-dm-dev]: https://david-dm.org/caseyWebb/badbadnotgood?type=dev
-[david-dm-dev-shield]: https://img.shields.io/david/dev/caseyWebb/badbadnotgood
