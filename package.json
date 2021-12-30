@@ -24,7 +24,8 @@
     "test:types": "tsd || true",
     "lint": "esw --color --ignore-path .gitignore --ext .js,.ts ./",
     "format": "pretty-quick",
-    "release": "standard-version --sign && git push --follow-tags"
+    "release": "standard-version --sign && git push --follow-tags",
+    "prepare": "husky install"
   },
   "keywords": [],
   "commitlint": {
@@ -46,13 +47,6 @@
         "./tsconfig.json",
         "./test/tsconfig.json"
       ]
-    }
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "yarn format --staged && yarn lint",
-      "pre-push": "yarn lint && yarn build:default"
     }
   },
   "jest": {
