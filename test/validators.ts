@@ -36,6 +36,7 @@ function testValidator<T>(
   test(name, () => {
     good.forEach((v) => expect(validator(v).isValid).toBe(true))
     bad.forEach((v) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       const { isValid, messages } = validator(v)
       expect(isValid).toBe(false)
       expect(messages[0]).toBe(NO_GOOD)
